@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, "home"]);
-Route::view('/todolist', 'home.todolist', ["title" => "Home Page"]);
+Route::get('/todolist', [HomeController::class, "home"]);
 
 // Route::get('/template', function () {
 //     return view('template');
