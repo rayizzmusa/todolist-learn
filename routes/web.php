@@ -6,6 +6,7 @@ use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
 use Illuminate\Support\Facades\Route;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
