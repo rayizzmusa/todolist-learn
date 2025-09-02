@@ -18,8 +18,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', [HomeController::class, "home"]);
-Route::get('/todolist', [HomeController::class, "home"]);
+Route::get('/', [HomeController::class, "home"])->middleware([OnlyMemberMiddleware::class]);
+Route::post('/todolist', [HomeController::class, "add"]);
+Route::delete('/todolist/{id}', [HomeController::class, "destroy"]);
+
+
 
 // Route::get('/template', function () {
 //     return view('template');

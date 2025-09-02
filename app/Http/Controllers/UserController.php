@@ -42,7 +42,7 @@ class UserController extends Controller
 
         if ($this->userService->login($user, $password)) {
             $request->session()->put("user", $user);
-            return redirect('/todolist');
+            return redirect('/');
         }
 
         return response()->view("user.login", [

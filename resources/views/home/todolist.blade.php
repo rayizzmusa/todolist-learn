@@ -14,11 +14,21 @@
 <body>
     <div class="container col-xl-10 col-xxl-8 px-4 py-5">
 
+        @if(isset($error))
         <div class="row">
             <div class="alert alert-danger" role="alert">
-                A simple primary alert—check it out!
+                {{$error}}
             </div>
         </div>
+        @elseif(isset($message))
+        <div class="row">
+            <div class="alert alert-danger" role="alert">
+                {{$message}}
+            </div>
+        </div>
+        @endif
+
+
         <div class="row">
             <form method="post" action="/logout">
                 <button class="w-15 btn btn-lg btn-danger" type="submit">Sign Out</button>
@@ -26,12 +36,13 @@
         </div>
         <div class="row align-items-center g-lg-5 py-5">
             <div class="col-lg-7 text-center text-lg-start">
-                <h1 class="display-4 fw-bold lh-1 mb-3">Todolist</h1>
+                <h1 class="display-4 fw-bold lh-1 mb-3">{{$dash}}</h1>
                 <p class="col-lg-10 fs-4">by <a target="_blank" href="https://www.programmerzamannow.com/">Programmer Zaman
                         Now</a></p>
             </div>
             <div class="col-md-10 mx-auto col-lg-5">
                 <form class="p-4 p-md-5 border rounded-3 bg-light" method="post" action="/todolist">
+                    @csrf
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" name="todo" placeholder="todo">
                         <label for="todo">Todo</label>
@@ -42,9 +53,6 @@
         </div>
         <div class="row align-items-right g-lg-5 py-5">
             <div class="mx-auto">
-                <form id="deleteForm" method="post" style="display: none">
-
-                </form>
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -54,13 +62,19 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach($todos as $todo)
                         <tr>
-                            <th scope="row">1</th>
-                            <td>Belajar Laravel Dasar</td>
+                            <th scope="row">{{$todo['id']}}</th>
+                            <td>{{$todo['todo']}}</td>
                             <td>
-                                <button class="w-100 btn btn-lg btn-danger" type="submit">Remove</button>
+                                <form method="post" action="/todolist/{{$todo['id']}}">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button class="w-100 btn btn-lg btn-danger" type="submit">Remove</button>
+                                </form>
                             </td>
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>

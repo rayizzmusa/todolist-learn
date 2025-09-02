@@ -6,28 +6,27 @@ use App\Services\TodolistService;
 
 class TodolistServiceImpl implements TodolistService
 {
-    private array $todos = [];
-    private int $nextId = 1;
 
     public function getAll(): array
     {
-        return array_values($this->todos);
+        return session()->get('todos', []);
     }
 
     public function create(array $data): array
     {
-        $todo = [
-            'id' => $this->nextId++,
-            'todo' => $data['todo'],
-        ];
-
-        $this->todos[$todo['id']] = $todo;
+        $todos = session()->get('todos', []);
+        $id = count($todos) + 1;
+        $todo = ['id' => $id, 'todo' => $data['todo']];
+        $todos[$id] = $todo;
+        session()->put('todos', $todos);
         return $todo;
     }
 
     public function delete(int $id): bool
     {
-        unset($this->todos[$id]);
+        $todos = session()->get('todos', []);
+        unset($todos[$id]);
+        session()->put('todos', $todos);
         return true;
     }
 }

@@ -20,10 +20,50 @@ class HomeController extends Controller
     {
         if ($request->session()->exists("user")) {
             $todos = $this->todolistService->getAll();
-            return response()->view('home.todolist', ['title' => 'Home Page'] + compact('todos'));
+            return response()->view('home.todolist', [
+                'title' => 'Home Page',
+                'dash' => 'Todolist'
+            ] + compact('todos'));
+            // response itu bisa view bisa json
             // return redirect("/todolist");
         } else {
             return redirect("/login");
         }
+    }
+
+
+    public function add(Request $request): Response
+    {
+        $todoInpt = $request->only('todo');
+        if (empty($todoInpt)) {
+            $todos = $this->todolistService->getAll();
+            return response()->view('home.todolist', [
+                "title" => "Home Page",
+                "dash" => "Todolist",
+                "error" => "masukan todo!",
+                "todos" => $todos
+            ]);
+        }
+        $this->todolistService->create($todoInpt);
+        $todos = $this->todolistService->getAll();
+
+        return response()->view("home.todolist", [
+            "title" => "Home Page",
+            "dash" => "Todolist",
+            "todos" => $todos
+        ]);
+    }
+
+    public function destroy(int $id): Response
+    {
+        $this->todolistService->delete($id);
+        $todos = $this->todolistService->getAll();
+
+        return response()->view("home.todolist", [
+            "title" => "Home Page",
+            "dash" => "Todolist",
+            "message" => "berhasil dihapus",
+            "todos" => $todos
+        ]);
     }
 }
